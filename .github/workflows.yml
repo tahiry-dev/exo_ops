@@ -1,0 +1,25 @@
+name: Deploy CloudFormation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate CloudFormation
+        uses: aws-actions/aws-cloudformation-validate-template@v1
+        with:
+          template: '/Users/tahiry/Documents/sources_hei/onitsiky_requirements/s3.yml'
+      - name: Deploy CloudFormation
+        uses: aws-actions/aws-cloudformation-deploy@v1
+        with:
+          template: '/Users/tahiry/Documents/sources_hei/onitsiky_requirements/s3.yml'
+          stack-name: 'MyCloudFormationStack'
+          capabilities: 'CAPABILITY_NAMED_IAM'
+          parameter-overrides: |
+            MyBucketNameParam=/mybucket/name
+            MyBucketArnParam=/mybucket/arn'
