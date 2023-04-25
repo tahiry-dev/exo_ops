@@ -1,0 +1,46 @@
+Parameters:
+  DBName:
+    Type: String
+    Default: DBPostgres
+Resources:
+  RDSDBI341IA:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      Default: '20'
+      DBInstanceIdentifier: exoCloudFormationRDS
+      DBInstanceClass: db.t2.micro
+      MasterUsername: !Sub "{{resolve:ssm:db/username}}"
+      MasterUserPassword: !Sub "{{resolve:ssm:db/password}}"
+  UserName:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: db/username
+      Type: String
+      Value: ${{ secrets.DB_USERNAME }}
+  UserPassword:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: db/username
+      Type: String
+      Value: ${{ secrets.DB_USERPASSWORD }}
+  DatabaseURL:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /db/url
+      Type: String
+      Value:
+        Fn::Join:
+          - ""
+          - - jdbc:postgresql://
+            - Fn::GetAtt:
+                - Database
+                - Endpoint.Address
+            - ":"
+            - Fn::GetAtt:
+                - Database
+                - Endpoint.Port
+            - "/"
+            - !Ref DBName
+Outputs:
+  DatabaseSSM:
+    Value: !Ref DatabaseSSM

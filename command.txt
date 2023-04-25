@@ -1,3 +1,0 @@
-aws cloudformation deploy --template-file /Users/tahiry/Documents/sources_hei/onitsiky_requirements/s3.yml --stack-name my-s3-stack --parameter-overrides MyBucketNameParam=STD21102 --capabilities CAPABILITY_NAMED_IAM
-
-NB:le nom de la pile n'est pas encore connu
